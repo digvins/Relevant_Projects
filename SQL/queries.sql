@@ -28,11 +28,12 @@ WHERE user_id NOT IN (SELECT user_id FROM post);
 
  
 -- Most Likes Posts
-SELECT post_likes.user_id, post_likes.post_id, COUNT(post_likes.post_id) 
-FROM post_likes, post
-WHERE post.post_id = post_likes.post_id 
-GROUP BY post_likes.post_id
-ORDER BY COUNT(post_likes.post_id) DESC ;
+SELECT p.user_id, pl.post_id, COUNT(pl.post_id) AS like_count
+FROM post_likes pl
+JOIN post p ON p.post_id = pl.post_id
+GROUP BY p.user_id, pl.post_id
+ORDER BY like_count DESC
+LIMIT 0, 1000;
 
 -- Average post per user
 SELECT ROUND((COUNT(post_id) / COUNT(DISTINCT user_id) ),2) AS 'Average Post per User' 
